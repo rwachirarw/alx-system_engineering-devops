@@ -1,2 +1,2 @@
 #!/bin/bash
-du
+find . -type d | wc -l
