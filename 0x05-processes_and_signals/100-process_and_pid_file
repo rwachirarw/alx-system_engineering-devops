@@ -6,16 +6,32 @@
 # Deletes the file /var/run/myscript.pid and terminates itself
 # when receiving a SIGQUIT or SIGTERM signal
 
+pidfile="/var/run/myscript.pid"
+
+# Function to handle cleanup and termination
 cleanup() {
-    rm /var/run/myscript.pid
+    echo "I hate the kill command"
+    rm "$pidfile"
     exit
 }
 
-trap 'cleanup' SIGQUIT SIGTERM
+# Function to handle SIGINT signal (Ctrl+C)
+interrupted() {
+    echo "Y U no love me?!"
+}
 
-while true; do
+# Function to start the main loop and trap signals
+start_loop() {
+    trap 'interrupted' SIGINT
+    trap 'cleanup' SIGQUIT SIGTERM
+
+    echo "$$" > "$pidfile"
     echo "To infinity and beyond"
-    sleep 2
-    trap 'echo "Y U no love me?!"' SIGINT
-    trap 'echo "I hate the kill command" && cleanup' SIGTERM
-done
+
+    while true; do
+        echo "To infinity and beyond"
+        sleep 1
+    done
+}
+
+start_loop
