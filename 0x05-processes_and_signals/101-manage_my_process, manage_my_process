@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# start, stop, restart process script
+
+start_process() {
+    ./manage_my_process &
+    echo "$!" > /var/run/my_process.pid
+    echo "manage_my_process started"
+}
+
+stop_process() {
+    if [ -f "/var/run/my_process.pid" ]; then
+        kill "$(cat /var/run/my_process.pid)"
+        rm -f /var/run/my_process.pid
+        echo "manage_my_process stopped"
+    else
+        echo "manage_my_process is not running (pid file not found)"
+    fi
+}
+
+restart_process() {
+    stop_process
+    start_process
+}
+
+case "$1" in
+    "start")
+        start_process
+        ;;
+    "stop")
+        stop_process
+        ;;
+    "restart")
+        restart_process
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart}"
+        ;;
+esac
