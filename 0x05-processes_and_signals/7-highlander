@@ -5,7 +5,7 @@
 # I am invincible!!! when receiving a SIGTERM signal
 
 # Handle SIGTERM
-trap "echo 'I am invincible!!!' && exit" 15
+trap "echo 'I am invincible!!!'" 15
 
 # Print the message forever
 while true;
